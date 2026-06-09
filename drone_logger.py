@@ -24,3 +24,8 @@ while True:
         show_flights("drone_log.txt")
     elif choice == "3":
         break
+    battery = float(input("Battery capacity (Wh): "))
+    power = energy / time
+    max_time = battery / power
+    if time > max_time * 0.8:
+        print("WARNING!, you used more than 80% of battery")
