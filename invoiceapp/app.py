@@ -16,6 +16,8 @@ def home():
 def invoice():
     seller_name = request.form['seller_name']
     seller_tax = request.form['seller_tax']
+    seller_phone = request.form['seller_phone']
+    seller_email = request.form['seller_email']
     client_name = request.form['client_name']
     services = request.form.getlist('service[]')
     prices = request.form.getlist('price[]')
@@ -51,18 +53,18 @@ def invoice():
     pdf.drawString(50, height - 190, seller_name)
     pdf.drawString(50, height - 208, f"Tax ID: {seller_tax}")
 
-    pdf.setFont("Helvetica-Bold", 12)
-    pdf.drawString(50, height - 240, "To:")
-    pdf.setFont("Helvetica", 12)
-    pdf.drawString(50, height - 260, client_name)
-
+    
+    pdf.drawString(50, height - 190, seller_name)
+    pdf.drawString(50, height - 208, f"Tax ID: {seller_tax}")
+    pdf.drawString(50, height - 226, f"Phone: {seller_phone}")
+    pdf.drawString(50, height - 244, f"Email: {seller_email}")
     # Line
-    pdf.line(50, height - 280, width - 50, height - 280)
+    pdf.line(50, height - 310, width - 50, height - 310)
 
     # Services
     pdf.setFont("Helvetica-Bold", 12)
-    pdf.drawString(50, height - 310, "Services:")
-    y = height - 330
+    pdf.drawString(50, height - 340, "Services:")
+    y = height - 360
     for i, (service, price) in enumerate(zip(services, prices)):
         pdf.setFont("Helvetica", 12)
         pdf.drawString(50, y, f"- {service}")
