@@ -1,3 +1,4 @@
+import sqlite3
 import datetime
 import random
 
@@ -7,7 +8,20 @@ from reportlab.pdfgen import canvas
 import io
 
 app = Flask(__name__)
+def init_db():
+    conn = sqlite3.connect('invoices.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS invoices
+                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  invoice_number TEXT,
+                  date TEXT,
+                  seller_name TEXT,
+                  client_name TEXT,
+                  total REAL)''')
+    conn.commit()
+    conn.close()
 
+init_db()
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -87,13 +101,26 @@ def invoice():
 
     pdf.save()
     buffer.seek(0)
-
+    # Save to database
+    conn = sqlite3.connect('invoices.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO invoices (invoice_number, date, seller_name, client_name, total) VALUES (?, ?, ?, ?, ?)",
+    (invoice_number, invoice_date, seller_name, client_name, total))
+    conn.commit()
+    conn.close()
     return send_file(
         buffer,
         as_attachment=True,
         download_name=f"invoice_{client_name}.pdf",
         mimetype='application/pdf'
     )
-
+@app.route('/history')
+def history():
+    conn = sqlite3.connect('invoices.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM invoices ORDER BY id DESC")
+    invoices = c.fetchall()
+    conn.close()
+    return render_template('history.html', invoices=invoices)
 if __name__ == '__main__':
     app.run(debug=True)
