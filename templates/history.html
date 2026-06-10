@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ExpressDeal - Invoice History</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #f1f5f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #f97316;
+            margin-bottom: 8px;
+        }
+        .back {
+            color: #94a3b8;
+            font-size: 13px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 32px;
+        }
+        .back:hover { color: #f97316; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #f97316;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #334155;
+        }
+        td {
+            padding: 14px 16px;
+            font-size: 14px;
+            color: #cbd5e1;
+            border-bottom: 1px solid #1e293b;
+        }
+        tr:hover td { background: #1e293b; }
+        .total { color: #f97316; font-weight: 600; }
+        .empty {
+            text-align: center;
+            padding: 60px;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">ExpressDeal</div>
+        <a href="/" class="back">← Create New Invoice</a>
+        <h2 style="margin-bottom: 24px; color: #f1f5f9;">Invoice History</h2>
+        {% if invoices %}
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Invoice</th>
+                <th>Date</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Total</th>
+            </tr>
+            {% for inv in invoices %}
+            <tr>
+                <td>{{ inv[0] }}</td>
+                <td>{{ inv[1] }}</td>
+                <td>{{ inv[2] }}</td>
+                <td>{{ inv[3] }}</td>
+                <td>{{ inv[4] }}</td>
+                <td class="total">{{ inv[5] }} MAD</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="empty">No invoices yet. Create your first one.</div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ExpressDeal - Invoice Generator</title>
+   <style>
+   * { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0f172a;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.container {
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 44px;
+    width: 100%;
+    max-width: 580px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    border: 1px solid #334155;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: 800;
+    color: #f97316;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+}
+
+.tagline {
+    font-size: 14px;
+    color: #94a3b8;
+    margin-bottom: 32px;
+}
+
+h3 {
+    font-size: 11px;
+    font-weight: 600;
+    color: #f97316;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 24px 0 12px;
+}
+
+h3:first-of-type { margin-top: 0; }
+
+input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #334155;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #f1f5f9;
+    background: #0f172a;
+    margin-bottom: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input::placeholder { color: #475569; }
+input:focus { border-color: #f97316; }
+
+button[type="submit"] {
+    width: 100%;
+    padding: 16px;
+    background: #f97316;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(249,115,22,0.4);
+}
+
+button[type="submit"]:hover {
+    background: #ea580c;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(249,115,22,0.5);
+}
+
+.divider {
+    height: 1px;
+    background: #334155;
+    margin: 8px 0 24px;
+}
+
+.service-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.service-row input { margin-bottom: 0; }
+
+.add-btn {
+    background: transparent;
+    color: #f97316;
+    border: 1.5px dashed #f97316;
+    border-radius: 8px;
+    margin-top: 4px;
+    font-size: 13px;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.add-btn:hover {
+    background: rgba(249,115,22,0.1);
+}
+
+.lang-switch {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.lang-btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1.5px solid #334155;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    width: auto;
+    margin-top: 0;
+    transition: all 0.2s;
+}
+
+.lang-btn.active {
+    background: #f97316;
+    color: white;
+    border-color: #f97316;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">ExpressDeal</div>
+       <a href="/history" style="font-size:12px; color:#f97316; text-decoration:none; float:right; margin-top:-30px;">View History →</a>
+        <div class="tagline">Professional invoices in seconds</div>
+<div class="lang-switch">
+    <button type="button" onclick="setLang('en')" id="btn-en" class="lang-btn active">EN</button>
+    <button type="button" onclick="setLang('fr')" id="btn-fr" class="lang-btn">FR</button>
+    <button type="button" onclick="setLang('ar')" id="btn-ar" class="lang-btn">AR</button>
+</div>
+        <form method="POST" action="/invoice">
+            <h3>Your Details</h3>
+            <input type="text" name="seller_name" placeholder="Your Full Name" required>
+            <input type="text" name="seller_tax" placeholder="Tax ID (ICE / CIN)" required>
+            <input type="text" name="seller_phone" placeholder="Phone Number" required>
+            <input type="email" name="seller_email" placeholder="Email Address" required>
+            <div class="divider"></div>
+            <h3>Client Details</h3>
+            <input type="text" name="client_name" placeholder="Client Name" required>
+
+            <div class="divider"></div>
+            <h3>Services</h3>
+<div id="services">
+    <div class="service-row">
+        <input type="text" name="service[]" placeholder="Service Description" required>
+        <input type="number" name="price[]" placeholder="Price (MAD)" required>
+    </div>
+</div>
+<button type="button" onclick="addService()" class="add-btn">+ Add Another Service</button>
+
+<script>
+function addService() {
+    const container = document.getElementById('services');
+    const row = document.createElement('div');
+    row.className = 'service-row';
+    row.innerHTML = `
+        <input type="text" name="service[]" placeholder="Service Description">
+        <input type="number" name="price[]" placeholder="Price (MAD)">
+    `;
+    container.appendChild(row);
+}
+</script>
+
+            <button type="submit">Generate Invoice PDF</button>
+        </form>
+    </div>
+<script>
+const translations = {
+    en: {
+        title: "ExpressDeal",
+        tagline: "Professional invoices in seconds",
+        your_details: "YOUR DETAILS",
+        your_name: "Your Full Name",
+        tax_id: "Tax ID (ICE / CIN)",
+        client_details: "CLIENT DETAILS",
+        client_name: "Client Name",
+        services: "SERVICES",
+        service_desc: "Service Description",
+        price: "Price (MAD)",
+        add_service: "+ Add Another Service",
+        generate: "Generate Invoice PDF",
+        dir: "ltr"
+    },
+    fr: {
+        title: "ExpressDeal",
+        tagline: "Factures professionnelles en quelques secondes",
+        your_details: "VOS COORDONNÉES",
+        your_name: "Votre Nom Complet",
+        tax_id: "Numéro fiscal (ICE / CIN)",
+        client_details: "COORDONNÉES CLIENT",
+        client_name: "Nom du Client",
+        services: "SERVICES",
+        service_desc: "Description du Service",
+        price: "Prix (MAD)",
+        add_service: "+ Ajouter un Service",
+        generate: "Générer la Facture PDF",
+        dir: "ltr"
+    },
+    ar: {
+        title: "إكسبريس ديل",
+        tagline: "فواتير احترافية في ثوانٍ",
+        your_details: "معلوماتك",
+        your_name: "اسمك الكامل",
+        tax_id: "الرقم الضريبي",
+        client_details: "معلومات العميل",
+        client_name: "اسم العميل",
+        services: "الخدمات",
+        service_desc: "وصف الخدمة",
+        price: "السعر (درهم)",
+        add_service: "+ إضافة خدمة أخرى",
+        generate: "إنشاء فاتورة PDF",
+        dir: "rtl"
+    }
+};
+
+function setLang(lang) {
+    const t = translations[lang];
+    document.querySelector('.logo').textContent = t.title;
+    document.querySelector('.tagline').textContent = t.tagline;
+    document.querySelectorAll('h3')[0].textContent = t.your_details;
+    document.querySelectorAll('h3')[1].textContent = t.client_details;
+    document.querySelectorAll('h3')[2].textContent = t.services;
+    document.querySelector('[name="seller_name"]').placeholder = t.your_name;
+    document.querySelector('[name="seller_tax"]').placeholder = t.tax_id;
+    document.querySelector('[name="client_name"]').placeholder = t.client_name;
+    document.querySelector('.service-row input[name="service[]"]').placeholder = t.service_desc;
+    document.querySelector('.service-row input[name="price[]"]').placeholder = t.price;
+    document.querySelector('.add-btn').textContent = t.add_service;
+    document.querySelector('button[type="submit"]').textContent = t.generate;
+    document.querySelector('.container').style.direction = t.dir;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + lang).classList.add('active');
+    window.currentLang = lang;
+}
+
+function addService() {
+    const container = document.getElementById('services');
+    const row = document.createElement('div');
+    row.className = 'service-row';
+    const t = translations[window.currentLang || 'en'];
+    row.innerHTML = `
+        <input type="text" name="service[]" placeholder="${t.service_desc}">
+        <input type="number" name="price[]" placeholder="${t.price}">
+    `;
+    container.appendChild(row);
+}
+</script>
+</body>
+</html>
