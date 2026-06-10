@@ -1,3 +1,6 @@
+import datetime
+import random
+
 from flask import Flask, render_template, request, send_file
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
@@ -18,7 +21,8 @@ def invoice():
     price = float(request.form['price'])
     vat = price * 0.20
     total = price + vat
-
+    invoice_number = f"ED-{random.randint(1000, 9999)}"
+    invoice_date = datetime.datetime.now().strftime("%d/%m/%Y")
     # Create PDF in memory
     buffer = io.BytesIO()
     pdf = canvas.Canvas(buffer, pagesize=A4)
@@ -30,37 +34,44 @@ def invoice():
     pdf.setFont("Helvetica", 12)
     pdf.drawString(50, height - 80, "Invoice")
 
+    # Invoice number and date
+    pdf.setFont("Helvetica", 11)
+    pdf.drawString(50, height - 100, f"Invoice #: {invoice_number}")
+    pdf.drawString(50, height - 118, f"Date: {invoice_date}")
+
     # Line
-    pdf.line(50, height - 90, width - 50, height - 90)
+    pdf.line(50, height - 140, width - 50, height - 140)
 
     # Seller and client
     pdf.setFont("Helvetica-Bold", 12)
-    pdf.drawString(50, height - 120, "From:")
+    pdf.drawString(50, height - 170, "From:")
     pdf.setFont("Helvetica", 12)
-    pdf.drawString(50, height - 140, seller_name)
-    pdf.drawString(50, height - 158, f"Tax ID: {seller_tax}")
+    pdf.drawString(50, height - 190, seller_name)
+    pdf.drawString(50, height - 208, f"Tax ID: {seller_tax}")
 
     pdf.setFont("Helvetica-Bold", 12)
-    pdf.drawString(50, height - 190, "To:")
+    pdf.drawString(50, height - 240, "To:")
     pdf.setFont("Helvetica", 12)
-    pdf.drawString(50, height - 210, client_name)
+    pdf.drawString(50, height - 260, client_name)
 
     # Line
-    pdf.line(50, height - 230, width - 50, height - 230)
+    pdf.line(50, height - 280, width - 50, height - 280)
 
-    # Service and prices
+    # Service
     pdf.setFont("Helvetica-Bold", 12)
-    pdf.drawString(50, height - 260, "Service:")
+    pdf.drawString(50, height - 310, "Service:")
     pdf.setFont("Helvetica", 12)
-    pdf.drawString(50, height - 280, service)
+    pdf.drawString(50, height - 330, service)
 
-    pdf.line(50, height - 300, width - 50, height - 300)
+    # Line
+    pdf.line(50, height - 350, width - 50, height - 350)
 
+    # Prices
     pdf.setFont("Helvetica", 12)
-    pdf.drawString(50, height - 330, f"Price:        {price} MAD")
-    pdf.drawString(50, height - 350, f"VAT (20%):    {vat} MAD")
+    pdf.drawString(50, height - 380, f"Price:        {price} MAD")
+    pdf.drawString(50, height - 400, f"VAT (20%):    {vat} MAD")
     pdf.setFont("Helvetica-Bold", 14)
-    pdf.drawString(50, height - 380, f"TOTAL:        {total} MAD")
+    pdf.drawString(50, height - 430, f"TOTAL:        {total} MAD")
 
     # Footer
     pdf.setFont("Helvetica", 10)
