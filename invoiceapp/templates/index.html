@@ -2,107 +2,122 @@
 <html>
 <head>
     <title>ExpressDeal - Invoice Generator</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f0f4f8;
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-        }
+   <style>
+   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .container {
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            width: 100%;
-            max-width: 560px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0f172a;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
 
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: #2563eb;
-            margin-bottom: 6px;
-        }
+.container {
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 44px;
+    width: 100%;
+    max-width: 580px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    border: 1px solid #334155;
+}
 
-        .tagline {
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 32px;
-        }
+.logo {
+    font-size: 30px;
+    font-weight: 800;
+    color: #f97316;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+}
 
-        h3 {
-            font-size: 13px;
-            font-weight: 600;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin: 24px 0 12px;
-        }
+.tagline {
+    font-size: 14px;
+    color: #94a3b8;
+    margin-bottom: 32px;
+}
 
-        h3:first-of-type { margin-top: 0; }
+h3 {
+    font-size: 11px;
+    font-weight: 600;
+    color: #f97316;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 24px 0 12px;
+}
 
-        input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #1e293b;
-            margin-bottom: 10px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
+h3:first-of-type { margin-top: 0; }
 
-        input:focus { border-color: #2563eb; }
+input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #334155;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #f1f5f9;
+    background: #0f172a;
+    margin-bottom: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+}
 
-        button {
-            width: 100%;
-            padding: 14px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 24px;
-            transition: background 0.2s;
-        }
+input::placeholder { color: #475569; }
+input:focus { border-color: #f97316; }
 
-        button:hover { background: #1d4ed8; }
+button[type="submit"] {
+    width: 100%;
+    padding: 16px;
+    background: #f97316;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(249,115,22,0.4);
+}
 
-        .divider {
-            height: 1px;
-            background: #f1f5f9;
-            margin: 8px 0 24px;
-        }
+button[type="submit"]:hover {
+    background: #ea580c;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(249,115,22,0.5);
+}
+
+.divider {
+    height: 1px;
+    background: #334155;
+    margin: 8px 0 24px;
+}
+
 .service-row {
     display: flex;
     gap: 10px;
     margin-bottom: 10px;
 }
 
-.service-row input {
-    margin-bottom: 0;
-}
+.service-row input { margin-bottom: 0; }
 
 .add-btn {
-    background: #f1f5f9;
-    color: #2563eb;
-    border: 1.5px dashed #2563eb;
-    margin-top: 0;
+    background: transparent;
+    color: #f97316;
+    border: 1.5px dashed #f97316;
+    border-radius: 8px;
+    margin-top: 4px;
     font-size: 13px;
     padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .add-btn:hover {
-    background: #e0e7ff;
+    background: rgba(249,115,22,0.1);
 }
+
 .lang-switch {
     display: flex;
     gap: 8px;
@@ -112,9 +127,9 @@
 .lang-btn {
     padding: 6px 16px;
     border-radius: 20px;
-    border: 1.5px solid #e2e8f0;
-    background: white;
-    color: #64748b;
+    border: 1.5px solid #334155;
+    background: transparent;
+    color: #94a3b8;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
@@ -124,9 +139,9 @@
 }
 
 .lang-btn.active {
-    background: #2563eb;
+    background: #f97316;
     color: white;
-    border-color: #2563eb;
+    border-color: #f97316;
 }
     </style>
 </head>
