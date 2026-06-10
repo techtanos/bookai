@@ -103,13 +103,42 @@
 .add-btn:hover {
     background: #e0e7ff;
 }
+.lang-switch {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.lang-btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1.5px solid #e2e8f0;
+    background: white;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    width: auto;
+    margin-top: 0;
+    transition: all 0.2s;
+}
+
+.lang-btn.active {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="logo">ExpressDeal</div>
         <div class="tagline">Professional invoices in seconds</div>
-
+<div class="lang-switch">
+    <button type="button" onclick="setLang('en')" id="btn-en" class="lang-btn active">EN</button>
+    <button type="button" onclick="setLang('fr')" id="btn-fr" class="lang-btn">FR</button>
+    <button type="button" onclick="setLang('ar')" id="btn-ar" class="lang-btn">AR</button>
+</div>
         <form method="POST" action="/invoice">
             <h3>Your Details</h3>
             <input type="text" name="seller_name" placeholder="Your Full Name" required>
@@ -145,5 +174,86 @@ function addService() {
             <button type="submit">Generate Invoice PDF</button>
         </form>
     </div>
+<script>
+const translations = {
+    en: {
+        title: "ExpressDeal",
+        tagline: "Professional invoices in seconds",
+        your_details: "YOUR DETAILS",
+        your_name: "Your Full Name",
+        tax_id: "Tax ID (ICE / CIN)",
+        client_details: "CLIENT DETAILS",
+        client_name: "Client Name",
+        services: "SERVICES",
+        service_desc: "Service Description",
+        price: "Price (MAD)",
+        add_service: "+ Add Another Service",
+        generate: "Generate Invoice PDF",
+        dir: "ltr"
+    },
+    fr: {
+        title: "ExpressDeal",
+        tagline: "Factures professionnelles en quelques secondes",
+        your_details: "VOS COORDONNÉES",
+        your_name: "Votre Nom Complet",
+        tax_id: "Numéro fiscal (ICE / CIN)",
+        client_details: "COORDONNÉES CLIENT",
+        client_name: "Nom du Client",
+        services: "SERVICES",
+        service_desc: "Description du Service",
+        price: "Prix (MAD)",
+        add_service: "+ Ajouter un Service",
+        generate: "Générer la Facture PDF",
+        dir: "ltr"
+    },
+    ar: {
+        title: "إكسبريس ديل",
+        tagline: "فواتير احترافية في ثوانٍ",
+        your_details: "معلوماتك",
+        your_name: "اسمك الكامل",
+        tax_id: "الرقم الضريبي",
+        client_details: "معلومات العميل",
+        client_name: "اسم العميل",
+        services: "الخدمات",
+        service_desc: "وصف الخدمة",
+        price: "السعر (درهم)",
+        add_service: "+ إضافة خدمة أخرى",
+        generate: "إنشاء فاتورة PDF",
+        dir: "rtl"
+    }
+};
+
+function setLang(lang) {
+    const t = translations[lang];
+    document.querySelector('.logo').textContent = t.title;
+    document.querySelector('.tagline').textContent = t.tagline;
+    document.querySelectorAll('h3')[0].textContent = t.your_details;
+    document.querySelectorAll('h3')[1].textContent = t.client_details;
+    document.querySelectorAll('h3')[2].textContent = t.services;
+    document.querySelector('[name="seller_name"]').placeholder = t.your_name;
+    document.querySelector('[name="seller_tax"]').placeholder = t.tax_id;
+    document.querySelector('[name="client_name"]').placeholder = t.client_name;
+    document.querySelector('.service-row input[name="service[]"]').placeholder = t.service_desc;
+    document.querySelector('.service-row input[name="price[]"]').placeholder = t.price;
+    document.querySelector('.add-btn').textContent = t.add_service;
+    document.querySelector('button[type="submit"]').textContent = t.generate;
+    document.querySelector('.container').style.direction = t.dir;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + lang).classList.add('active');
+    window.currentLang = lang;
+}
+
+function addService() {
+    const container = document.getElementById('services');
+    const row = document.createElement('div');
+    row.className = 'service-row';
+    const t = translations[window.currentLang || 'en'];
+    row.innerHTML = `
+        <input type="text" name="service[]" placeholder="${t.service_desc}">
+        <input type="number" name="price[]" placeholder="${t.price}">
+    `;
+    container.appendChild(row);
+}
+</script>
 </body>
 </html>
