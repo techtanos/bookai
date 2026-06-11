@@ -24,6 +24,10 @@ def init_db():
 init_db()
 @app.route('/')
 def home():
+    return render_template('landing.html')
+
+@app.route('/app')
+def app_page():
     return render_template('index.html')
 
 @app.route('/invoice', methods=['POST'])
