@@ -11,6 +11,7 @@ from reportlab.pdfgen import canvas
 import io
 
 app = Flask(__name__)
+app.secret_key = 'expressdeal2026'
 def init_db():
     conn = sqlite3.connect('invoices.db')
     c = conn.cursor()
