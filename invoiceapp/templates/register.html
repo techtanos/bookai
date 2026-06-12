@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ExpressDeal - Register</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 44px;
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid #334155;
+        }
+        .logo { font-size: 24px; font-weight: 800; color: #f97316; margin-bottom: 8px; }
+        .title { font-size: 18px; font-weight: 600; color: #f1f5f9; margin-bottom: 32px; }
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #334155;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #f1f5f9;
+            background: #0f172a;
+            margin-bottom: 12px;
+            outline: none;
+        }
+        input:focus { border-color: #f97316; }
+        input::placeholder { color: #475569; }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #f97316;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .link { font-size: 13px; color: #64748b; text-align: center; margin-top: 20px; }
+        .link a { color: #f97316; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">ExpressDeal</div>
+        <div class="title">Create your account</div>
+        <form method="POST">
+            <input type="email" name="email" placeholder="Email address" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Create Account</button>
+        </form>
+        <div class="link">Already have an account? <a href="/login">Sign in</a></div>
+    </div>
+</body>
+</html>

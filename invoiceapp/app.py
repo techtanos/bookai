@@ -4,7 +4,9 @@ import json
 import sqlite3
 import datetime
 import random
-
+from flask import Flask, render_template, request, send_file, redirect
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request, send_file
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
@@ -12,6 +14,9 @@ import io
 
 app = Flask(__name__)
 app.secret_key = 'expressdeal2026'
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 def init_db():
     conn = sqlite3.connect('invoices.db')
     c = conn.cursor()
@@ -24,8 +29,39 @@ def init_db():
                   total REAL)''')
     conn.commit()
     conn.close()
-
+def init_db():
+    conn = sqlite3.connect('invoices.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS invoices
+                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  invoice_number TEXT,
+                  date TEXT,
+                  seller_name TEXT,
+                  client_name TEXT,
+                  total REAL,
+                  user_id INTEGER)''')
+    c.execute('''CREATE TABLE IF NOT EXISTS users
+                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  email TEXT UNIQUE,
+                  password_hash TEXT)''')
+    conn.commit()
+    conn.close()
 init_db()
+class User(UserMixin):
+    def __init__(self, id, email):
+        self.id = id
+        self.email = email
+
+@login_manager.user_loader
+def load_user(user_id):
+    conn = sqlite3.connect('invoices.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    user = c.fetchone()
+    conn.close()
+    if user:
+        return User(user[0], user[1])
+    return None
 @app.route('/')
 def home():
     return render_template('landing.html')
@@ -123,8 +159,8 @@ def invoice():
     # Save to database
     conn = sqlite3.connect('invoices.db')
     c = conn.cursor()
-    c.execute("INSERT INTO invoices (invoice_number, date, seller_name, client_name, total) VALUES (?, ?, ?, ?, ?)",
-    (invoice_number, invoice_date, seller_name, client_name, total))
+    c.execute("INSERT INTO invoices (invoice_number, date, seller_name, client_name, total, user_id) VALUES (?, ?, ?, ?, ?, ?)",
+          (invoice_number, invoice_date, seller_name, client_name, total, current_user.id))
     conn.commit()
     conn.close()
     return send_file(
@@ -134,12 +170,55 @@ def invoice():
         mimetype='application/pdf'
     )
 @app.route('/history')
+@login_required
 def history():
     conn = sqlite3.connect('invoices.db')
     c = conn.cursor()
-    c.execute("SELECT * FROM invoices ORDER BY id DESC")
+    c.execute("SELECT * FROM invoices WHERE user_id = ? ORDER BY id DESC", (current_user.id,))
     invoices = c.fetchall()
     conn.close()
     return render_template('history.html', invoices=invoices)
+if __name__ == '__main__':
+    app.run(debug=True)
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        password_hash = generate_password_hash(password)
+        try:
+            conn = sqlite3.connect('invoices.db')
+            c = conn.cursor()
+            c.execute("INSERT INTO users (email, password_hash) VALUES (?, ?)",
+                      (email, password_hash))
+            conn.commit()
+            conn.close()
+            return redirect('/login')
+        except:
+            return "Email already exists. <a href='/register'>Try again</a>"
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        conn = sqlite3.connect('invoices.db')
+        c = conn.cursor()
+        c.execute("SELECT * FROM users WHERE email = ?", (email,))
+        user = c.fetchone()
+        conn.close()
+        if check_password_hash(user[2], password):
+            login_user(User(user[0], user[1]))
+            return redirect('/app')
+        else:
+            return "Wrong email or password. <a href='/login'>try again</a>"
+    return render_template('login.html')
+           
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
 if __name__ == '__main__':
     app.run(debug=True)
