@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BookAI - Results</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0d0a1a;
+            color: #cbd5e1;
+            padding: 40px 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a855f7, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        .back {
+            color: #a855f7;
+            text-decoration: none;
+            font-size: 13px;
+            display: inline-block;
+            margin-bottom: 32px;
+        }
+        .back:hover { color: #06b6d4; }
+        .content-box {
+            background: #130d2e;
+            border: 1px solid #1e1040;
+            border-radius: 16px;
+            padding: 32px;
+            white-space: pre-wrap;
+            line-height: 1.9;
+            font-size: 14px;
+            color: #cbd5e1;
+        }
+        .content-box strong, b {
+            color: #06b6d4;
+            font-weight: 600;
+        }
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(168,85,247,0.15);
+            color: #a855f7;
+            border: 1px solid #a855f7;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">BookAI</div>
+        <a href="/" class="back">← Analyze another book</a>
+        <div class="badge">✓ Analysis complete</div>
+        <h1>Key Concepts + Quiz</h1>
+        <div class="content-box">{{ content }}</div>
+    </div>
+</body>
+</html>

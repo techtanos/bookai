@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BookAI - Learn faster from any book</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0d0a1a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a855f7, #06b6d4, #7dd3fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            font-size: 15px;
+            color: #64748b;
+            margin-bottom: 48px;
+            line-height: 1.6;
+        }
+
+        .upload-box {
+            background: #130d2e;
+            border: 2px dashed #4c1d95;
+            border-radius: 16px;
+            padding: 48px 32px;
+            text-align: center;
+            transition: border-color 0.2s;
+            margin-bottom: 16px;
+            cursor: pointer;
+        }
+
+        .upload-box:hover { border-color: #a855f7; }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .upload-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 8px;
+        }
+
+        .upload-sub {
+            font-size: 13px;
+            color: #475569;
+            margin-bottom: 24px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-label {
+            display: inline-block;
+            padding: 10px 24px;
+            background: rgba(168,85,247,0.15);
+            border: 1px solid #a855f7;
+            border-radius: 8px;
+            color: #a855f7;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-label:hover { background: rgba(168,85,247,0.25); }
+
+        .file-name {
+            font-size: 13px;
+            color: #06b6d4;
+            margin-top: 12px;
+            min-height: 20px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #7c3aed, #06b6d4);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 8px;
+            box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+        }
+
+        button[type="submit"]:hover { opacity: 0.9; }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .feature {
+            background: #130d2e;
+            border: 1px solid #1e1040;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .feature-icon { font-size: 20px; margin-bottom: 8px; }
+        .feature-text { font-size: 12px; color: #64748b; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">BookAI</div>
+        <div class="tagline">Upload any technical book. Get the key concepts,<br>foundations, and quizzes to actually learn it.</div>
+
+        <form method="POST" action="/analyze" enctype="multipart/form-data" id="uploadForm">
+            <div class="upload-box" onclick="document.getElementById('bookInput').click()">
+                <div class="upload-icon">📚</div>
+                <div class="upload-title">Drop your PDF here</div>
+                <div class="upload-sub">or click to browse</div>
+                <label class="file-label" onclick="event.stopPropagation()">
+                    Choose PDF
+                    <input type="file" name="book" id="bookInput" accept=".pdf" required onchange="showName(this)">
+                </label>
+                <div class="file-name" id="fileName">No file selected</div>
+            </div>
+            <button type="submit">Extract Key Concepts + Generate Quiz →</button>
+        </form>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🧠</div>
+                <div class="feature-text">10 critical concepts extracted</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">❓</div>
+                <div class="feature-text">Quiz to test your understanding</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-text">Learn in hours not weeks</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function showName(input) {
+        document.getElementById('fileName').textContent = input.files[0] ? input.files[0].name : 'No file selected';
+    }
+    </script>
+</body>
+</html>
