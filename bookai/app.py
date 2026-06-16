@@ -45,12 +45,18 @@ For each concept:
 Explanation: [2 clear sentences]
 Real example: [1 practical example]
 
-PART 2 - QUIZ:
-Create 5 multiple choice questions to test understanding of these concepts.
+PART 2 - STUDY PLAN:
+For each concept create a 3-step action plan to actually master it:
+Step 1: [Understand - what to read or watch]
+Step 2: [Practice - a specific exercise to do]
+Step 3: [Apply - a real project or task to complete]
+
+PART 3 - QUIZ:
+Create 5 multiple choice questions to test understanding.
 Format each question as:
 Q[number]: [Question]
 A) [option]
-B) [option]  
+B) [option]
 C) [option]
 D) [option]
 Answer: [correct letter]
