@@ -4,6 +4,9 @@ import sqlite3
 import datetime
 import random
 
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+limiter = Limiter(app, key_func=get_remote_address)
 from flask import Flask, render_template, request, send_file
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
@@ -27,7 +30,12 @@ init_db()
 @app.route('/')
 def home():
     return render_template('index.html')
-
+@app.route('/invoice', methods=['POST'])
+@limiter.limit("10 per minute")
+def invoice():
+@app.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
+def login():
 @app.route('/invoice', methods=['POST'])
 def invoice():
     seller_name = request.form['seller_name']

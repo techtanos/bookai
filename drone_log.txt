@@ -1,0 +1,3 @@
+Flight 1: mass=2.5kg, speed=10m/s, force=24.5N
+Flight 2: mass=3.7kg, speed=15m/s, force=36.3N
+Flight 3: mass=9.9kg, speed=20m/s, force=97.0N
